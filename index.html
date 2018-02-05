@@ -6,10 +6,12 @@
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.full.min.js"></script>
-        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.min.css" />
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment-with-locales.min.js"></script>
+        
         <style>
             * {
                 font-family: Arial, Helvetica, sans-serif;
@@ -116,7 +118,10 @@
                 $.datetimepicker.setLocale('pt-BR');
                 $('.dia-hora input').datetimepicker({
                     format: 'd/m/Y H:i',
-                    inline: true
+                    inline: true,
+                    onChangeDateTime:function(dateTimePicker, input){
+                        $('#hora-termino').text(moment(input.val(), 'DD/MM/YYYY H:mm').add(2, 'hours').format('H:mm'));
+                    }
                 });
                 function validarCampoObrigatorio(id) {
                     if (!$(id).val().trim()) {
@@ -163,7 +168,7 @@
         <label class="email">E-mail*:<input id="email" type="text"></label>
         <label class="endereco">Endereço*:<input id="endereco" type="text"></label>
         <label class="dia-hora">Data e hora de início da visita*:<input id="dia-hora" type="text"></label>
-        <label class="hora-termino">Hora de término da visita: <strong>20:00</strong></label>
+        <label class="hora-termino">Hora de término da visita: <strong id="hora-termino">20:00</strong></label>
         <input id="solicitar-visita" type="button" value="Solicitar visita">
     </body>
 </html>
