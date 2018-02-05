@@ -149,7 +149,7 @@
                         body += `E-mail: ${$('#email').val()}\r\n`;
                         body += `Endereço: ${$('#endereco').val()}\r\n`;
                         body += `Data e hora de início da visita: ${$('#dia-hora').val()}\r\n`;
-                        window.open(`mailto:arienecabralesilva@gmail.com?subject=Orçamento%20de%20CFTV&body=${encodeURIComponent(body)}`);
+                        window.location.href = `mailto:arienecabralesilva@gmail.com?subject=Orçamento%20de%20CFTV&body=${encodeURIComponent(body)}`;
                     }
                     
                 });                
