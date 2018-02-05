@@ -1,0 +1,169 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <script
+            src="http://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.full.min.js"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.min.css" />
+        <style>
+            * {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            input, .dia-hora .xdsoft_datetimepicker {
+                margin-top: 5px;
+                border-radius: 5px;
+            }
+            input[type=button] {
+                margin-top: 15px;
+                padding: 10px;
+                width: 100%;
+                background-color: #3af;
+                border-color: #3af;
+                color: white;
+                font-size: 12pt;
+            }
+            label {
+                margin-top: 15px;
+                color: gray;
+                font-size: 10pt;
+            }
+            input[type=text] {
+                height: 30px;
+                border: 1px solid lightgray;
+            }
+            .nome {
+                display: inline-grid;
+                width: 49.2%;
+            }
+            .telefone {
+                display: inline-grid;
+                width: 49.6%;
+            }
+            .email {
+                display: inline-block;
+                width: 100%;
+            }
+            .email input {
+                width: 100%;
+            }
+            .endereco {
+                display: inline-block;
+                width: 100%;
+            }
+            .endereco input {
+                width: 100%;
+            }
+            .dia-hora {
+                display: inline-grid;
+            }
+            h1 {
+                font-size: 16pt;
+                color: gray;
+                text-align: center;
+                border-width: 1px;
+                border-style: solid;
+                border-color: gray;
+                border-radius: 5px;
+                padding: 10px;
+                color: #3af;
+                border-color: #3af;
+            }
+            .hora-termino {
+                display: inline-block;
+            }
+            .hora-termino strong {
+                color: black;
+            }
+            .camera {
+                float: right;
+                width: 50px;
+                height: 50px;
+                border-width: 1px;
+                border-style: solid;
+                border-color: #3af;
+                border-radius: 50px;
+            }
+            .campo-erro {
+                border-color: #d26565 !important;
+            }
+            .label-erro {
+                color: #d26565;
+            }
+        </style>
+        <script>
+            $(() => {
+
+                $("#telefone")
+                .mask("(99) 9999-9999?9")
+                .focusout(function (event) {  
+                    var target, phone, element;  
+                    target = (event.currentTarget) ? event.currentTarget : event.srcElement;  
+                    phone = target.value.replace(/\D/g, '');
+                    element = $(target);  
+                    element.unmask();  
+                    if(phone.length > 10) {  
+                        element.mask("(99) 99999-999?9");  
+                    } else {  
+                        element.mask("(99) 9999-9999?9");  
+                    }  
+                });
+
+                $.datetimepicker.setLocale('pt-BR');
+                $('.dia-hora input').datetimepicker({
+                    format: 'd/m/Y H:i',
+                    inline: true
+                });
+                function validarCampoObrigatorio(id) {
+                    if (!$(id).val().trim()) {
+                        $(id).addClass('campo-erro');
+                        $(id).closest('label').addClass('label-erro');
+                        if (id == '#dia-hora') {
+                            $('.xdsoft_datetimepicker').addClass('campo-erro');
+                        }
+                    }
+                }
+                $('#solicitar-visita').bind('click', () => {
+                    $('.campo-erro').each((indice, campo) => {
+                        $(campo).removeClass('campo-erro');
+                        $(campo).closest('label').removeClass('label-erro');
+                        if ($(campo).hasClass('xdsoft_datetimepicker')) {
+                            $(campo).removeClass('campo-erro');
+                        }
+                    });
+
+                    validarCampoObrigatorio('#nome');
+                    validarCampoObrigatorio('#telefone');
+                    validarCampoObrigatorio('#endereco');
+                    validarCampoObrigatorio('#email');
+                    validarCampoObrigatorio('#dia-hora');
+
+                    if ($('.campo-erro').length == 0) {
+                        let body = '';
+                        body += `Nome: ${$('#nome').val()}\r\n`;
+                        body += `Telefone: ${$('#telefone').val()}\r\n`;
+                        body += `E-mail: ${$('#email').val()}\r\n`;
+                        body += `Endereço: ${$('#endereco').val()}\r\n`;
+                        body += `Data e hora de início da visita: ${$('#dia-hora').val()}\r\n`;
+                        window.open(`mailto:arienecabralesilva@gmail.com?subject=Orçamento%20de%20CFTV&body=${encodeURIComponent(body)}`);
+                    }
+                    
+                });                
+            });            
+        </script>
+    </head>
+    <body>
+        <h1><img class="camera" src="camera.png">Agendamento de visita para orçamento de CFTV</h1>
+        <label class="nome">Nome*:<input id="nome" type="text"></label>
+        <label class="telefone">Telefone*:<input id="telefone" type="text"></label>
+        <label class="email">E-mail*:<input id="email" type="text"></label>
+        <label class="endereco">Endereço*:<input id="endereco" type="text"></label>
+        <label class="dia-hora">Data e hora de início da visita*:<input id="dia-hora" type="text"></label>
+        <label class="hora-termino">Hora de término da visita: <strong>20:00</strong></label>
+        <input id="solicitar-visita" type="button" value="Solicitar visita">
+    </body>
+</html>
