@@ -171,6 +171,10 @@
                 }
 
                 function adicionarValidacaoAoCampo(id) {
+                    $(id).bind('keyup', () => {
+                        removerMarcasDeErro($(id));
+                        validarCampoObrigatorio(id);
+                    });
                     $(id).bind('blur', () => {
                         removerMarcasDeErro($(id));
                         validarCampoObrigatorio(id);
