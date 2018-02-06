@@ -104,6 +104,14 @@
             .titulo {
                 padding: 10px;
             }
+            .legenda {
+                color: gray;
+                font-size: 10pt;
+                color: goldenrod;
+            }
+            .mensagem-erro-validacao {
+                font-size: 8pt;
+            }
         </style>
         <script>
             $(() => {
@@ -142,19 +150,45 @@
                     if (!$(id).val().trim()) {
                         $(id).addClass('campo-erro');
                         $(id).closest('label').addClass('label-erro');
+                        $(id).closest('label').append('<span class="mensagem-erro-validacao">Preenchimento obrigatório</span>');
                     }
                 }
-                $('#solicitar-visita').bind('click', () => {
-                    $('.campo-erro').each((indice, campo) => {
-                        $(campo).removeClass('campo-erro');
-                        $(campo).closest('label').removeClass('label-erro');
-                    });
 
+                function validarCamposObrigatorios() {
                     validarCampoObrigatorio('#nome');
                     validarCampoObrigatorio('#telefone');
                     validarCampoObrigatorio('#endereco');
                     validarCampoObrigatorio('#email');
                     validarCampoObrigatorio('#dia-hora');
+                }
+
+                validarCamposObrigatorios();
+
+                function removerMarcasDeErro(campo) {                    
+                    $(campo).removeClass('campo-erro');
+                    $(campo).closest('label').removeClass('label-erro');
+                    $(campo).closest('label').find('.mensagem-erro-validacao').remove();
+                }
+
+                function adicionarValidacaoAoCampo(id) {
+                    $(id).bind('blur', () => {
+                        removerMarcasDeErro($(id));
+                        validarCampoObrigatorio(id);
+                    });
+                }
+
+                adicionarValidacaoAoCampo('#nome');
+                adicionarValidacaoAoCampo('#telefone');
+                adicionarValidacaoAoCampo('#endereco');
+                adicionarValidacaoAoCampo('#email');
+                adicionarValidacaoAoCampo('#dia-hora');
+
+                $('#solicitar-visita').bind('click', () => {
+                    $('.campo-erro').each((indice, campo) => {
+                        removerMarcasDeErro(campo);
+                    });
+
+                    validarCamposObrigatorios();
 
                     if ($('.campo-erro').length == 0) {
                         let body = '';
