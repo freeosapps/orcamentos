@@ -138,20 +138,22 @@
                     }  
                 });
 
+                let dataAgora = new Date();
+
                 $('.dia-hora input').flatpickr({
                     locale: 'pt',
                     inline: true,
                     time_24hr: true,
                     enableTime: true,
-                    defaultDate: new Date(),
+                    defaultDate: dataAgora,
                     dateFormat: 'd/m/Y H:i',
-                    minDate: new Date(),
+                    minDate: dataAgora,
                     onValueUpdate: (valor) => {
                         $('#hora-termino').text(moment(valor[0], 'DD/MM/YYYY HH:mm').add(2, 'hours').format('HH:mm'));
                     }
                 });
 
-                $('#hora-termino').text(moment(new Date(), 'DD/MM/YYYY HH:mm').add(2, 'hours').format('HH:mm'));
+                $('#hora-termino').text(moment(dataAgora, 'DD/MM/YYYY HH:mm').add(2, 'hours').format('HH:mm'));
 
                 function validarCampoObrigatorio(id) {
                     if (!$(id).val().trim()) {
