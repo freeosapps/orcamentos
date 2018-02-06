@@ -40,7 +40,7 @@
                 margin-top: 15px;
                 color: gray;
                 font-size: 10pt;
-                display: inline-block;
+                display: block;
             }
             input[type=text], input[type=tel], input[type=email] {
                 height: 35px;
@@ -62,7 +62,7 @@
                 border-color: #569ff7;
             }
 
-            .hora-termino strong {
+            #hora-termino {
                 color: black;
             }
             .camera {
@@ -108,14 +108,24 @@
 
                 let dataAgora = new Date();
 
-                $('.dia-hora input').flatpickr({
+                $('#dia').flatpickr({
+                    locale: 'pt',
+                    inline: true,
+                    defaultDate: dataAgora,
+                    dateFormat: 'd/m/Y',
+                    minDate: dataAgora
+                });
+              
+                 $('#hora-inicio').flatpickr({
                     locale: 'pt',
                     inline: true,
                     time_24hr: true,
                     enableTime: true,
                     defaultDate: dataAgora,
-                    dateFormat: 'd/m/Y H:i',
+                    dateFormat: 'H:i',
                     minDate: dataAgora,
+                    noCalendar: true,
+                    minuteIncrement: 1,
                     onValueUpdate: (valor) => {
                         $('#hora-termino').text(moment(valor[0], 'DD/MM/YYYY HH:mm').add(2, 'hours').format('HH:mm'));
                     }
@@ -136,7 +146,7 @@
                     validarCampoObrigatorio('#telefone');
                     validarCampoObrigatorio('#email');
                     validarCampoObrigatorio('#endereco');                    
-                    validarCampoObrigatorio('#dia-hora');
+                    validarCampoObrigatorio('#dia');
                 }
 
                 validarCamposObrigatorios();
@@ -162,7 +172,7 @@
                 adicionarValidacaoAoCampo('#telefone');
                 adicionarValidacaoAoCampo('#email');
                 adicionarValidacaoAoCampo('#endereco');                
-                adicionarValidacaoAoCampo('#dia-hora');
+                adicionarValidacaoAoCampo('#dia');
 
                 $('#solicitar-visita').bind('click', () => {
                     $('.campo-erro').each((indice, campo) => {
@@ -177,7 +187,7 @@
                         body += `Telefone: ${$('#telefone').val()}\r\n`;
                         body += `E-mail: ${$('#email').val()}\r\n`;
                         body += `Endereço: ${$('#endereco').val()}\r\n`;
-                        body += `Data e hora de início da visita: ${$('#dia-hora').val()}\r\n`;
+                        body += `Data e hora de início da visita: ${$('#dia').val()}\r\n`;
                         window.location.href = `mailto:arienecabralesilva@gmail.com;brunomrsn@gmail.com?subject=Orçamento%20de%20CFTV&body=${encodeURIComponent(body)}`;
                     } else {
                         $('html, body').animate({
@@ -191,12 +201,13 @@
     </head>
     <body>
         <h1><img class="camera" src="camera.png"><span class="titulo">Agendamento de visita para orçamento de CFTV</span></h1>
-        <label class="nome">Nome:<input id="nome" type="text"></label>
-        <label class="telefone">Telefone:<input id="telefone" type="tel"></label>
-        <label class="email">E-mail:<input id="email" type="email"></label>
-        <label class="endereco">Endereço:<input id="endereco" type="text"></label>
-        <label class="dia-hora">Data e hora de início da visita:<input id="dia-hora" type="text"></label>
-        <label class="hora-termino">Hora de término da visita: <strong id="hora-termino"></strong></label>
+        <label>Nome:<input id="nome" type="text"></label>
+        <label>Telefone:<input id="telefone" type="tel"></label>
+        <label>E-mail:<input id="email" type="email"></label>
+        <label>Endereço:<input id="endereco" type="text"></label>
+        <label>Dia da visita:<input id="dia" type="text"></label>
+        <label>Hora de início da visita: <input id="hora-inicio" type="text"></label>
+        <label>Hora de término da visita: <strong id="hora-termino"></strong></label>
         <input id="solicitar-visita" type="button" value="Solicitar visita">
     </body>
 </html>
