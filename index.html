@@ -157,8 +157,8 @@
                 function validarCamposObrigatorios() {
                     validarCampoObrigatorio('#nome');
                     validarCampoObrigatorio('#telefone');
-                    validarCampoObrigatorio('#endereco');
                     validarCampoObrigatorio('#email');
+                    validarCampoObrigatorio('#endereco');                    
                     validarCampoObrigatorio('#dia-hora');
                 }
 
@@ -179,8 +179,8 @@
 
                 adicionarValidacaoAoCampo('#nome');
                 adicionarValidacaoAoCampo('#telefone');
-                adicionarValidacaoAoCampo('#endereco');
                 adicionarValidacaoAoCampo('#email');
+                adicionarValidacaoAoCampo('#endereco');                
                 adicionarValidacaoAoCampo('#dia-hora');
 
                 $('#solicitar-visita').bind('click', () => {
@@ -198,6 +198,10 @@
                         body += `Endereço: ${$('#endereco').val()}\r\n`;
                         body += `Data e hora de início da visita: ${$('#dia-hora').val()}\r\n`;
                         window.location.href = `mailto:arienecabralesilva@gmail.com;brunomrsn@gmail.com?subject=Orçamento%20de%20CFTV&body=${encodeURIComponent(body)}`;
+                    } else {
+                        $('html, body').animate({
+                            scrollTop: $($('.campo-erro')[0]).closest('label').offset().top
+                        }, 500);
                     }
                     
                 });                
