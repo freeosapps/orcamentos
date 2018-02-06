@@ -36,7 +36,7 @@
                 color: gray;
                 font-size: 10pt;
             }
-            input[type=text] {
+            input[type=text], input[type=tel], input[type=email] {
                 height: 30px;
                 border: 1px solid lightgray;
             }
@@ -215,8 +215,8 @@
     <body>
         <h1><img class="camera" src="camera.png"><span class="titulo">Agendamento de visita para orçamento de CFTV</span></h1>
         <label class="nome">Nome*:<input id="nome" type="text"></label>
-        <label class="telefone">Telefone*:<input id="telefone" type="text"></label>
-        <label class="email">E-mail*:<input id="email" type="text"></label>
+        <label class="telefone">Telefone*:<input id="telefone" type="tel"></label>
+        <label class="email">E-mail*:<input id="email" type="email"></label>
         <label class="endereco">Endereço*:<input id="endereco" type="text"></label>
         <label class="dia-hora">Data e hora de início da visita*:<input id="dia-hora" type="text"></label>
         <label class="hora-termino">Hora de término da visita: <strong id="hora-termino"></strong></label>
