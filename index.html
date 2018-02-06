@@ -5,18 +5,20 @@
             src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.full.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.17/jquery.datetimepicker.min.css" />
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment-with-locales.min.js"></script>
         
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.4/flatpickr.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.4/flatpickr.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.4/l10n/pt.js"></script>
+
         <style>
             * {
                 font-family: Arial, Helvetica, sans-serif;
             }
-            input, .dia-hora .xdsoft_datetimepicker {
+            input {
                 margin-top: 5px;
                 border-radius: 5px;
             }
@@ -62,7 +64,9 @@
             }
             .dia-hora {
                 display: inline-grid;
+                width: 100%;
             }
+
             h1 {
                 font-size: 16pt;
                 color: gray;
@@ -87,14 +91,18 @@
                 height: 50px;
                 border-width: 1px;
                 border-style: solid;
-                border-color: #3af;
+                border-color:lightgray;
                 border-radius: 50px;
+                background-color: white;
             }
             .campo-erro {
                 border-color: #d26565 !important;
             }
             .label-erro {
                 color: #d26565;
+            }
+            .titulo {
+                padding: 10px;
             }
         </style>
         <script>
@@ -115,30 +123,31 @@
                     }  
                 });
 
-                $.datetimepicker.setLocale('pt-BR');
-                $('.dia-hora input').datetimepicker({
-                    format: 'd/m/Y H:i',
+                $('.dia-hora input').flatpickr({
+                    locale: 'pt',
                     inline: true,
-                    onChangeDateTime:function(dateTimePicker, input){
-                        $('#hora-termino').text(moment(input.val(), 'DD/MM/YYYY H:mm').add(2, 'hours').format('H:mm'));
+                    time_24hr: true,
+                    enableTime: true,
+                    defaultDate: new Date(),
+                    dateFormat: 'd/m/Y H:i',
+                    minDate: new Date(),
+                    onValueUpdate: (valor) => {
+                        $('#hora-termino').text(moment(valor[0], 'DD/MM/YYYY HH:mm').add(2, 'hours').format('HH:mm'));
                     }
                 });
+
+                $('#hora-termino').text(moment(new Date(), 'DD/MM/YYYY HH:mm').add(2, 'hours').format('HH:mm'));
+
                 function validarCampoObrigatorio(id) {
                     if (!$(id).val().trim()) {
                         $(id).addClass('campo-erro');
                         $(id).closest('label').addClass('label-erro');
-                        if (id == '#dia-hora') {
-                            $('.xdsoft_datetimepicker').addClass('campo-erro');
-                        }
                     }
                 }
                 $('#solicitar-visita').bind('click', () => {
                     $('.campo-erro').each((indice, campo) => {
                         $(campo).removeClass('campo-erro');
                         $(campo).closest('label').removeClass('label-erro');
-                        if ($(campo).hasClass('xdsoft_datetimepicker')) {
-                            $(campo).removeClass('campo-erro');
-                        }
                     });
 
                     validarCampoObrigatorio('#nome');
@@ -154,7 +163,7 @@
                         body += `E-mail: ${$('#email').val()}\r\n`;
                         body += `Endereço: ${$('#endereco').val()}\r\n`;
                         body += `Data e hora de início da visita: ${$('#dia-hora').val()}\r\n`;
-                        window.location.href = `mailto:arienecabralesilva@gmail.com?subject=Orçamento%20de%20CFTV&body=${encodeURIComponent(body)}`;
+                        window.location.href = `mailto:arienecabralesilva@gmail.com;brunomrsn@gmail.com?subject=Orçamento%20de%20CFTV&body=${encodeURIComponent(body)}`;
                     }
                     
                 });                
@@ -162,13 +171,13 @@
         </script>
     </head>
     <body>
-        <h1><img class="camera" src="camera.png">Agendamento de visita para orçamento de CFTV</h1>
+        <h1><img class="camera" src="camera.png"><span class="titulo">Agendamento de visita para orçamento de CFTV</span></h1>
         <label class="nome">Nome*:<input id="nome" type="text"></label>
         <label class="telefone">Telefone*:<input id="telefone" type="text"></label>
         <label class="email">E-mail*:<input id="email" type="text"></label>
         <label class="endereco">Endereço*:<input id="endereco" type="text"></label>
         <label class="dia-hora">Data e hora de início da visita*:<input id="dia-hora" type="text"></label>
-        <label class="hora-termino">Hora de término da visita: <strong id="hora-termino">20:00</strong></label>
+        <label class="hora-termino">Hora de término da visita: <strong id="hora-termino"></strong></label>
         <input id="solicitar-visita" type="button" value="Solicitar visita">
     </body>
 </html>
