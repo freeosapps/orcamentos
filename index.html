@@ -181,12 +181,39 @@
                     validarCamposObrigatorios();
 
                     if ($('.campo-erro').length == 0) {
+                      
+                        $.ajax({
+                          url: 'https://api.jsonbin.io/b/5a7a10cb04b9c21255e411c5',
+                          type: 'PUT',
+                          contentType: 'application/json',
+                          crossDomain: true,
+                          data: JSON.stringify({
+                            nome: $('#nome').val(),
+                            telefone: $('#telefone').val(),
+                            email: $('#email').val(),
+                            endereco: $('#endereco').val(),
+                            dataVisita: $('#dia').val(),
+                            horaInicioVisita: $('#hora-inicio').val()                        
+                          }),
+                          headers: {
+                            'secret-key': '$2a$10$36OrqFiFkayzMeIVm1nCXeeAeHFNpxNUISBsL6.RV7vZm5nt61fWy',
+                            'private': true
+                          },
+                          success: (data) => {
+                            console.log(data);
+                          },
+                          error: (err) => {
+                            console.log(err.responseJSON);
+                          }
+                        });
+                      
                         let body = '';
                         body += `Nome: ${$('#nome').val()}\r\n`;
                         body += `Telefone: ${$('#telefone').val()}\r\n`;
                         body += `E-mail: ${$('#email').val()}\r\n`;
                         body += `Endereço: ${$('#endereco').val()}\r\n`;
-                        body += `Data e hora de início da visita: ${$('#dia').val()}\r\n`;
+                        body += `Data da visita: ${$('#dia').val()}\r\n`;
+                        body += `Hora de início da visita: ${$('#hora-inicio').val()}\r\n`;
                         window.location.href = `mailto:arienecabralesilva@gmail.com;brunomrsn@gmail.com?subject=Orçamento%20de%20CFTV&body=${encodeURIComponent(body)}`;
                     } else {
                         $('html, body').animate({
