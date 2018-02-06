@@ -187,6 +187,9 @@
                           type: 'PUT',
                           contentType: 'application/json',
                           crossDomain: true,
+                          xhrFields: {
+                              withCredentials: true
+                          },
                           data: JSON.stringify({
                             nome: $('#nome').val(),
                             telefone: $('#telefone').val(),
