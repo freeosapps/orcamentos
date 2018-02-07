@@ -200,6 +200,7 @@
                             elementPosition: 'top left'
                           });
                           $('#nome,#telefone,#email,#endereco').val('');
+                          validarCamposObrigatorios();
                         }, function(err) {
                           $('#solicitar-visita').notify('Não foi possível solicitar a visita. Tente novamente mais tarde.', {
                             className: 'error'
