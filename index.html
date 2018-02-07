@@ -20,6 +20,16 @@
         <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/picker.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/picker.date.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/picker.time.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/translations/pt_BR.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/legacy.js"></script>
+      
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/themes/default.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/themes/default.date.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/themes/default.time.css">
         <style>
             * {
                 font-family: Arial, Helvetica, sans-serif;
@@ -94,7 +104,8 @@
             }
         </style>
         <script>
-            $(() => {              
+            $(() => {
+              
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
                             
                 $('#telefone').setMask("(99) 9999-99999").ready(function(event) {
@@ -112,31 +123,21 @@
 
                 let dataAgora = new Date();
 
-                $('#dia').flatpickr({
-                    locale: 'pt',
-                    inline: true,
-                    defaultDate: dataAgora,
-                    dateFormat: 'd/m/Y',
-                    minDate: dataAgora
+                $('#dia').pickadate();
+                $('#hora-inicio').pickatime({
+                  format: 'HH:i',
+                  closeOnSelect: true,
+                  closeOnClear: true,
+                  onSet: () => {
+                    let horaInicioVisita = $('#hora-inicio').val();
+                    if (horaInicioVisita) {
+                      $('#hora-termino').text(moment(horaInicioVisita, 'HH:mm').add(2, 'hours').format('HH:mm'));
+                    } else {
+                      $('#hora-termino').text('--:--');
+                    }
+                  }
                 });
               
-                 $('#hora-inicio').flatpickr({
-                    locale: 'pt',
-                    inline: true,
-                    time_24hr: true,
-                    enableTime: true,
-                    defaultDate: dataAgora,
-                    dateFormat: 'H:i',
-                    minDate: dataAgora,
-                    noCalendar: true,
-                    minuteIncrement: 1,
-                    onValueUpdate: (valor) => {
-                        $('#hora-termino').text(moment(valor[0], 'DD/MM/YYYY HH:mm').add(2, 'hours').format('HH:mm'));
-                    }
-                });
-
-                $('#hora-termino').text(moment(dataAgora, 'DD/MM/YYYY HH:mm').add(2, 'hours').format('HH:mm'));
-
                 function validarCampoObrigatorio(id) {
                     if (!$(id).val().trim()) {
                         $(id).addClass('campo-erro');
@@ -151,6 +152,7 @@
                     validarCampoObrigatorio('#email');
                     validarCampoObrigatorio('#endereco');                    
                     validarCampoObrigatorio('#dia');
+                    validarCampoObrigatorio('#hora-inicio');
                 }
 
                 validarCamposObrigatorios();
@@ -177,6 +179,7 @@
                 adicionarValidacaoAoCampo('#email');
                 adicionarValidacaoAoCampo('#endereco');                
                 adicionarValidacaoAoCampo('#dia');
+                adicionarValidacaoAoCampo('#hora-inicio');
 
                 $('#solicitar-visita').bind('click', () => {
                     $('.campo-erro').each((indice, campo) => {
@@ -224,7 +227,7 @@
         <label>Endereço:<input id="endereco" type="text"></label>
         <label>Dia da visita:<input id="dia" type="text"></label>
         <label>Hora de início da visita: <input id="hora-inicio" type="text"></label>
-        <label>Hora de término da visita: <strong id="hora-termino"></strong></label>
+        <label>Hora de término da visita: <strong id="hora-termino">--:--</strong></label>
         <input id="solicitar-visita" type="button" value="Solicitar visita">
     </body>
 </html>
