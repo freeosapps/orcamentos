@@ -16,7 +16,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.4/l10n/pt.js"></script>
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.meiomask/1.1.14/meiomask.min.js"></script>
+
+        <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
       
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
         <style>
             * {
                 font-family: Arial, Helvetica, sans-serif;
@@ -92,6 +95,8 @@
         </style>
         <script>
             $(() => {              
+                emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
+                            
                 $('#telefone').setMask("(99) 9999-99999").ready(function(event) {
                     var target, phone, element;
                     target = (event.currentTarget) ? event.currentTarget : event.srcElement;
@@ -180,45 +185,27 @@
 
                     validarCamposObrigatorios();
 
-                    if ($('.campo-erro').length == 0) {
-                      
-                        $.ajax({
-                          url: 'https://api.jsonbin.io/b/5a7a10cb04b9c21255e411c5',
-                          type: 'PUT',
-                          contentType: 'application/json',
-                          crossDomain: true,
-                          xhrFields: {
-                              withCredentials: true
-                          },
-                          data: JSON.stringify({
-                            nome: $('#nome').val(),
-                            telefone: $('#telefone').val(),
-                            email: $('#email').val(),
-                            endereco: $('#endereco').val(),
-                            dataVisita: $('#dia').val(),
-                            horaInicioVisita: $('#hora-inicio').val()                        
-                          }),
-                          headers: {
-                            'secret-key': '$2a$10$36OrqFiFkayzMeIVm1nCXeeAeHFNpxNUISBsL6.RV7vZm5nt61fWy',
-                            'private': true
-                          },
-                          success: (data) => {
-                            console.log(data);
-                          },
-                          error: (err) => {
-                            console.log(err.responseJSON);
-                          }
+                    if ($('.campo-erro').length == 0) {                      
+                        emailjs.send('gmail', 'agendamento_de_visita_para_or_amento_de_cftv', {
+                          nome: $('#nome').val(),
+                          telefone: $('#telefone').val(),
+                          endereco: $('#endereco').val(),
+                          email: $('#email').val(),
+                          dataVisita: $('#dia').val(),
+                          horaInicioVisita: $('#hora-inicio').val()
+                        })
+                        .then(function(response) {
+                          $('#solicitar-visita').notify('Solicitação de visita realizada com sucesso.', {
+                            className: 'success',
+                            elementPosition: 'top left'
+                          });
+                          $('#nome,#telefone,#email,#endereco').val('');
+                        }, function(err) {
+                          $('#solicitar-visita').notify('Não foi possível solicitar a visita. Tente novamente mais tarde.', {
+                            className: 'error'
+                          });
                         });
-                      
-                        let body = '';
-                        body += `Nome: ${$('#nome').val()}\r\n`;
-                        body += `Telefone: ${$('#telefone').val()}\r\n`;
-                        body += `E-mail: ${$('#email').val()}\r\n`;
-                        body += `Endereço: ${$('#endereco').val()}\r\n`;
-                        body += `Data da visita: ${$('#dia').val()}\r\n`;
-                        body += `Hora de início da visita: ${$('#hora-inicio').val()}\r\n`;
-                        window.location.href = `mailto:arienecabralesilva@gmail.com;brunomrsn@gmail.com?subject=Orçamento%20de%20CFTV&body=${encodeURIComponent(body)}`;
-                    } else {
+                      } else {
                         $('html, body').animate({
                             scrollTop: $($('.campo-erro')[0]).closest('label').offset().top
                         }, 500);
