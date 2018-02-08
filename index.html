@@ -30,6 +30,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/themes/default.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/themes/default.date.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/themes/default.time.css">
+      
         <style>
             * {
                 font-family: Arial, Helvetica, sans-serif;
@@ -105,34 +106,32 @@
         </style>
         <script>
             $(() => {
-              
+             
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
-                            
-                $('#telefone').setMask("(99) 9999-99999").ready(function(event) {
-                    var target, phone, element;
-                    target = (event.currentTarget) ? event.currentTarget : event.srcElement;
-                    phone = target.value.replace(/\D/g, '');
-                    element = $(target);
-                    element.unsetMask();
-                    if(phone.length > 10) {
-                        element.setMask("(99) 99999-9999");
-                    } else {
-                        element.setMask("(99) 9999-99999");
-                    }
+              
+                $('#dia').pickadate({
+                  container: '#conteiner-dia',
+                  onRender: function() {
+                    removerMarcasDeErro('#dia');
+                    validarCampoObrigatorio('#dia');
+                  }
                 });
-
-                $('#dia').pickadate();
-                $('#hora-inicio').pickatime({
+              
+                let timePicker = $('#hora-inicio').pickatime({
                   format: 'HH:i',
-                  closeOnSelect: true,
-                  closeOnClear: true,
-                  onSet: () => {
+                  container: '#conteiner-hora-inicio',
+                  onRender: function() {
+                    removerMarcasDeErro('#hora-inicio');
+                    validarCampoObrigatorio('#hora-inicio');
+                  },                  
+                  onSet: function(valor) {
                     let horaInicioVisita = $('#hora-inicio').val();
                     if (horaInicioVisita) {
                       $('#hora-termino').text(moment(horaInicioVisita, 'HH:mm').add(2, 'hours').format('HH:mm'));
                     } else {
                       $('#hora-termino').text('--:--');
                     }
+                    
                   }
                 });
               
@@ -142,6 +141,15 @@
                         $(id).closest('label').addClass('label-erro');
                         $(id).closest('label').append('<span class="mensagem-erro-validacao">Preenchimento obrigatório</span>');
                     }
+                }
+              
+                function removerMarcasDeErroDeTodosCampos() {
+                  removerMarcasDeErro('#nome');
+                  removerMarcasDeErro('#telefone');
+                  removerMarcasDeErro('#email');
+                  removerMarcasDeErro('#endereco');
+                  removerMarcasDeErro('#dia');
+                  removerMarcasDeErro('#hora-inicio');
                 }
 
                 function validarCamposObrigatorios() {
@@ -153,6 +161,7 @@
                     validarCampoObrigatorio('#hora-inicio');
                 }
 
+                removerMarcasDeErroDeTodosCampos();
                 validarCamposObrigatorios();
 
                 function removerMarcasDeErro(campo) {                    
@@ -180,10 +189,7 @@
                 adicionarValidacaoAoCampo('#hora-inicio');
 
                 $('#solicitar-visita').bind('click', () => {
-                    $('.campo-erro').each((indice, campo) => {
-                        removerMarcasDeErro(campo);
-                    });
-
+                    removerMarcasDeErroDeTodosCampos();
                     validarCamposObrigatorios();
 
                     if ($('.campo-erro').length == 0) {                      
@@ -201,6 +207,7 @@
                             elementPosition: 'top left'
                           });
                           $('#nome,#telefone,#email,#endereco').val('');
+                          removerMarcasDeErroDeTodosCampos();
                           validarCamposObrigatorios();
                         }, function(err) {
                           $('#solicitar-visita').notify('Não foi possível solicitar a visita. Tente novamente mais tarde.', {
@@ -223,7 +230,9 @@
         <label>Telefone:<input id="telefone" type="tel"></label>
         <label>E-mail:<input id="email" type="email"></label>
         <label>Endereço:<input id="endereco" type="text"></label>
-        <label>Dia da visita:<input id="dia" type="text"></label>
+        <div id="conteiner-dia"></div>
+        <label>Dia da visita: <input id="dia" type="text"></label>
+        <div id="conteiner-hora-inicio"></div>
         <label>Hora de início da visita: <input id="hora-inicio" type="text"></label>
         <label>Hora de término da visita: <strong id="hora-termino">--:--</strong></label>
         <input id="solicitar-visita" type="button" value="Solicitar visita">
