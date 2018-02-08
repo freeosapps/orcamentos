@@ -104,14 +104,7 @@
             .titulo {
                 padding: 10px;
                 margin: 3px;
-            }
-            .mensagem-erro-validacao {
-                font-size: 10pt;
-                position: relative;
-                top: -30px;
-                left: 5px;
-                color: #a20303;
-            }            
+            }      
         </style>
         <script>
             $(() => {
@@ -148,7 +141,6 @@
                     if (!$(id).val().trim()) {
                         $(id).addClass('campo-erro');
                         $(id).closest('label').addClass('label-erro');
-                        //$(id).closest('label').append('<span class="mensagem-erro-validacao">Preenchimento obrigatório</span>');
                     }
                 }
               
@@ -176,7 +168,6 @@
                 function removerMarcasDeErro(campo) {                    
                     $(campo).removeClass('campo-erro');
                     $(campo).closest('label').removeClass('label-erro');
-                    $(campo).closest('label').find('.mensagem-erro-validacao').remove();
                 }
 
                 function adicionarValidacaoAoCampo(id) {
