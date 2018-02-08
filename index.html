@@ -31,6 +31,11 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/themes/default.date.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/themes/default.time.css">
       
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/css/inputmask.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/jquery.inputmask.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.regex.extensions.min.js"></script>
+      
         <style>
             * {
                 font-family: Arial, Helvetica, sans-serif;
@@ -103,27 +108,52 @@
             .titulo {
                 padding: 10px;
                 margin: 3px;
-            }      
+            }
+            .mensagem-erro-validacao {
+              text-align: right;
+              color: #d10000;
+            }
         </style>
         <script>
             $(() => {
-             
+              
+                function setupPhoneMaskOnField(selector){
+                  var inputElement = $(selector)
+
+                  setCorrectPhoneMask(inputElement);
+                  inputElement.on('input, keyup', function(){
+                    setCorrectPhoneMask(inputElement);
+                  });
+                }
+
+                function setCorrectPhoneMask(element){
+                  if (element.inputmask('unmaskedvalue').length > 10 ){
+                    element.inputmask('remove');
+                    element.inputmask('(99) 9999[9]-9999')
+                  } else {
+                    element.inputmask('remove');
+                    element.inputmask({mask: '(99) 9999-9999[9]', greedy: false})
+                  }
+                }
+              
+                setupPhoneMaskOnField('#telefone');
+              
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
               
                 $('#dia').pickadate({
                   container: '#conteiner-dia',
                   onRender: function() {
                     removerMarcasDeErro('#dia');
-                    validarCampoObrigatorio('#dia');
+                    validarCampo('#dia');
                   }
                 });
               
-                let timePicker = $('#hora-inicio').pickatime({
+                $('#hora-inicio').pickatime({
                   format: 'HH:i',
                   container: '#conteiner-hora-inicio',
                   onRender: function() {
                     removerMarcasDeErro('#hora-inicio');
-                    validarCampoObrigatorio('#hora-inicio');
+                    validarCampo('#hora-inicio');
                   },                  
                   onSet: function(valor) {
                     let horaInicioVisita = $('#hora-inicio').val();
@@ -131,15 +161,19 @@
                       $('#hora-termino').text(moment(horaInicioVisita, 'HH:mm').add(2, 'hours').format('HH:mm'));
                     } else {
                       $('#hora-termino').text('--:--');
-                    }
-                    
+                    }                    
                   }
                 });
               
-                function validarCampoObrigatorio(id) {
+                function validarCampo(id, formato, nome) {
                     if (!$(id).val().trim()) {
                         $(id).addClass('campo-erro');
                         $(id).closest('label').addClass('label-erro');
+                        $(id).closest('label').append('<div class="mensagem-erro-validacao">Preenchimento obrigatório</div>');
+                    } else if (formato && !$(id).val().match(formato)) {
+                        $(id).addClass('campo-erro');
+                        $(id).closest('label').addClass('label-erro');
+                        $(id).closest('label').append(`<div class="mensagem-erro-validacao">${nome} inválido</div>`);
                     }
                 }
               
@@ -152,44 +186,45 @@
                   removerMarcasDeErro('#hora-inicio');
                 }
 
-                function validarCamposObrigatorios() {
-                    validarCampoObrigatorio('#nome');
-                    validarCampoObrigatorio('#telefone');
-                    validarCampoObrigatorio('#email');
-                    validarCampoObrigatorio('#endereco');                    
-                    validarCampoObrigatorio('#dia');
-                    validarCampoObrigatorio('#hora-inicio');
+                function validarCampos() {
+                    validarCampo('#nome');
+                    validarCampo('#telefone', /\(\d{2}\)\s\9?\d{4}\-\d{4}/, 'Telefone');
+                    validarCampo('#email', /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'E-mail');
+                    validarCampo('#endereco');                    
+                    validarCampo('#dia');
+                    validarCampo('#hora-inicio');
                 }
 
                 removerMarcasDeErroDeTodosCampos();
-                validarCamposObrigatorios();
+                validarCampos();
 
                 function removerMarcasDeErro(campo) {                    
                     $(campo).removeClass('campo-erro');
                     $(campo).closest('label').removeClass('label-erro');
+                    $(campo).closest('label').find('.mensagem-erro-validacao').remove();
                 }
 
-                function adicionarValidacaoAoCampo(id) {
+                function adicionarValidacaoAoCampo(id, formato, nome) {
                     $(id).bind('keyup', () => {
                         removerMarcasDeErro($(id));
-                        validarCampoObrigatorio(id);
+                        validarCampo(id, formato, nome);
                     });
                     $(id).bind('blur', () => {
                         removerMarcasDeErro($(id));
-                        validarCampoObrigatorio(id);
+                        validarCampo(id, formato, nome);
                     });
                 }
 
                 adicionarValidacaoAoCampo('#nome');
-                adicionarValidacaoAoCampo('#telefone');
-                adicionarValidacaoAoCampo('#email');
+                adicionarValidacaoAoCampo('#telefone', /\(\d{2}\)\s\9?\d{4}\-\d{4}/, 'Telefone');
+                adicionarValidacaoAoCampo('#email', /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'E-mail');
                 adicionarValidacaoAoCampo('#endereco');                
                 adicionarValidacaoAoCampo('#dia');
                 adicionarValidacaoAoCampo('#hora-inicio');
 
                 $('#solicitar-visita').bind('click', () => {
                     removerMarcasDeErroDeTodosCampos();
-                    validarCamposObrigatorios();
+                    validarCampos();
 
                     if ($('.campo-erro').length == 0) {                      
                         emailjs.send('gmail', 'agendamento_de_visita_para_or_amento_de_cftv', {
@@ -207,7 +242,7 @@
                           });
                           $('#nome,#telefone,#email,#endereco').val('');
                           removerMarcasDeErroDeTodosCampos();
-                          validarCamposObrigatorios();
+                          validarCampos();
                         }, function(err) {
                           $('#solicitar-visita').notify('Não foi possível solicitar a visita. Tente novamente mais tarde.', {
                             className: 'error'
@@ -225,14 +260,14 @@
     </head>
     <body>
         <h1><img class="camera" src="camera.png"><span class="titulo">Agendamento de visita para orçamento de CFTV</span></h1>
-        <label>Nome:<input id="nome" type="text" placeholder="* Preenchimento obrigatório"></label>
-        <label>Telefone:<input id="telefone" type="tel" placeholder="* Preenchimento obrigatório"></label>
-        <label>E-mail:<input id="email" type="email" placeholder="* Preenchimento obrigatório"></label>
-        <label>Endereço:<input id="endereco" type="text" placeholder="* Preenchimento obrigatório"></label>
+        <label>Nome:<input id="nome" type="text"></label>
+        <label>Telefone:<input id="telefone" type="text"></label>
+        <label>E-mail:<input id="email" type="text"></label>
+        <label>Endereço:<input id="endereco" type="text"></label>
         <div id="conteiner-dia"></div>
-        <label>Dia da visita: <input id="dia" type="text" placeholder="* Preenchimento obrigatório"></label>
+        <label>Dia da visita: <input id="dia" type="text"></label>
         <div id="conteiner-hora-inicio"></div>
-        <label>Hora de início da visita: <input id="hora-inicio" type="text" placeholder="* Preenchimento obrigatório"></label>
+        <label>Hora de início da visita: <input id="hora-inicio" type="text"></label>
         <label>Hora de término da visita: <strong id="hora-termino">--:--</strong></label>
         <input id="solicitar-visita" type="button" value="Solicitar visita">
     </body>
