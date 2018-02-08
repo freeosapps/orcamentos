@@ -5,9 +5,7 @@
         <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
-
-   
+            crossorigin="anonymous"></script>   
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment-with-locales.min.js"></script>
         
@@ -15,7 +13,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.4/flatpickr.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.4/l10n/pt.js"></script>
         
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.13/jquery.mask.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.13/jquery.mask.min.js"></script>
 
         <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
       
@@ -230,6 +228,7 @@
                             elementPosition: 'top left'
                           });
                           $('#nome,#telefone,#email,#endereco,#dia,#hora-inicio').val('');
+                          $('#hora-termino').val('--:--');
                           removerMarcasDeErroDeTodosCampos();
                           validarCampos();
                           $('#solicitar-visita').prop('disabled', false);
