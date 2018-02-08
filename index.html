@@ -7,7 +7,7 @@
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+   
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment-with-locales.min.js"></script>
         
@@ -30,12 +30,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/themes/default.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/themes/default.date.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/themes/default.time.css">
-      
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/css/inputmask.min.css" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/jquery.inputmask.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.regex.extensions.min.js"></script>
-      
+            
         <style>
             * {
                 font-family: Arial, Helvetica, sans-serif;
@@ -117,27 +112,19 @@
         <script>
             $(() => {
               
-                function setupPhoneMaskOnField(selector){
-                  var inputElement = $(selector)
-
-                  setCorrectPhoneMask(inputElement);
-                  inputElement.on('input, keyup', function(){
-                    setCorrectPhoneMask(inputElement);
-                  });
-                }
-
-                function setCorrectPhoneMask(element){
-                  if (element.inputmask('unmaskedvalue').length > 10 ){
-                    element.inputmask('remove');
-                    element.inputmask('(99) 9999[9]-9999')
+              $('#telefone').on('input, keyup', function (event) {
+                  var target, phone, element;
+                  target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                  phone = target.value.replace(/\D/g, '');
+                  element = $(target);
+                  element.unsetMask();
+                  if (phone.length > 10) {
+                      element.setMask("(99) 99999-9999");
                   } else {
-                    element.inputmask('remove');
-                    element.inputmask({mask: '(99) 9999-9999[9]', greedy: false})
+                      element.setMask("(99) 9999-99999");
                   }
-                }
-              
-                setupPhoneMaskOnField('#telefone');
-              
+              })
+                            
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
               
                 $('#dia').pickadate({
