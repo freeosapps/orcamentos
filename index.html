@@ -112,7 +112,7 @@
         <script>
             $(() => {
               
-              $('#telefone').on('input, keyup', function (event) {
+              $('#telefone').on('input', function (event) {
                   var target, phone, element;
                   target = (event.currentTarget) ? event.currentTarget : event.srcElement;
                   phone = target.value.replace(/\D/g, '');
