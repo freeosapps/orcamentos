@@ -112,7 +112,8 @@
         <script>
             $(() => {
               
-              $('#telefone').on('blur', function (event) {
+              $('#telefone').setMask("(99) 9999-99999");
+              $('#telefone').on('input', function (event) {
                   var target, phone, element;
                   target = (event.currentTarget) ? event.currentTarget : event.srcElement;
                   phone = target.value.replace(/\D/g, '');
