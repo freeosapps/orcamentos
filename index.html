@@ -95,9 +95,6 @@
             .campo-erro {
                 border-color: #d26565 !important;
             }
-            .label-erro {
-                color: #d26565;
-            }
             .titulo {
                 padding: 10px;
                 margin: 3px;
@@ -155,11 +152,9 @@
                 function validarCampo(id, formato, nome) {
                     if (!$(id).val().trim()) {
                         $(id).addClass('campo-erro');
-                        $(id).closest('label').addClass('label-erro');
                         $(id).closest('label').append('<div class="mensagem-erro-validacao">Preenchimento obrigatório</div>');
                     } else if (formato && !$(id).val().match(formato)) {
                         $(id).addClass('campo-erro');
-                        $(id).closest('label').addClass('label-erro');
                         $(id).closest('label').append(`<div class="mensagem-erro-validacao">${nome} inválido</div>`);
                     }
                 }
@@ -187,7 +182,6 @@
 
                 function removerMarcasDeErro(campo) {                    
                     $(campo).removeClass('campo-erro');
-                    $(campo).closest('label').removeClass('label-erro');
                     $(campo).closest('label').find('.mensagem-erro-validacao').remove();
                 }
 
