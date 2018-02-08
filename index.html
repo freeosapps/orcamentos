@@ -37,10 +37,11 @@
                 outline: none;
             }
             input:focus {
-                box-shadow: 0 0 5px;
+                border-bottom-width: 2px !important;
             }
             input {
                 margin-top: 5px;
+                margin-bottom: 5px;
                 border-radius: 5px;
             }
             input[type=button] {
@@ -59,8 +60,10 @@
                 display: block;
             }
             input[type=text], input[type=tel], input[type=email] {
-                height: 35px;
-                border: 1px solid lightgray;
+                border: none;
+                border-bottom-width: 1px;
+                border-bottom-style: solid;
+                border-bottom-color: lightgray;
                 padding: 5px;
                 width: 100%;
             }
@@ -90,6 +93,7 @@
                 border-color:lightgray;
                 border-radius: 50px;
                 background-color: white;
+                margin: 3px;
             }
             .campo-erro {
                 border-color: #d26565 !important;
@@ -99,10 +103,15 @@
             }
             .titulo {
                 padding: 10px;
+                margin: 3px;
             }
             .mensagem-erro-validacao {
-                font-size: 8pt;
-            }
+                font-size: 10pt;
+                position: relative;
+                top: -30px;
+                left: 5px;
+                color: #a20303;
+            }            
         </style>
         <script>
             $(() => {
@@ -139,7 +148,7 @@
                     if (!$(id).val().trim()) {
                         $(id).addClass('campo-erro');
                         $(id).closest('label').addClass('label-erro');
-                        $(id).closest('label').append('<span class="mensagem-erro-validacao">Preenchimento obrigatório</span>');
+                        //$(id).closest('label').append('<span class="mensagem-erro-validacao">Preenchimento obrigatório</span>');
                     }
                 }
               
@@ -226,14 +235,14 @@
     </head>
     <body>
         <h1><img class="camera" src="camera.png"><span class="titulo">Agendamento de visita para orçamento de CFTV</span></h1>
-        <label>Nome:<input id="nome" type="text"></label>
-        <label>Telefone:<input id="telefone" type="tel"></label>
-        <label>E-mail:<input id="email" type="email"></label>
-        <label>Endereço:<input id="endereco" type="text"></label>
+        <label>Nome:<input id="nome" type="text" placeholder="* Preenchimento obrigatório"></label>
+        <label>Telefone:<input id="telefone" type="tel" placeholder="* Preenchimento obrigatório"></label>
+        <label>E-mail:<input id="email" type="email" placeholder="* Preenchimento obrigatório"></label>
+        <label>Endereço:<input id="endereco" type="text" placeholder="* Preenchimento obrigatório"></label>
         <div id="conteiner-dia"></div>
-        <label>Dia da visita: <input id="dia" type="text"></label>
+        <label>Dia da visita: <input id="dia" type="text" placeholder="* Preenchimento obrigatório"></label>
         <div id="conteiner-hora-inicio"></div>
-        <label>Hora de início da visita: <input id="hora-inicio" type="text"></label>
+        <label>Hora de início da visita: <input id="hora-inicio" type="text" placeholder="* Preenchimento obrigatório"></label>
         <label>Hora de término da visita: <strong id="hora-termino">--:--</strong></label>
         <input id="solicitar-visita" type="button" value="Solicitar visita">
     </body>
