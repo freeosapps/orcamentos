@@ -112,19 +112,19 @@
         <script>
             $(() => {
               
-              $('#telefone').mask("(99) 9999-99999");
-              $('#telefone').on('blur', function (event) {
-                  var target, phone, element;
-                  target = (event.currentTarget) ? event.currentTarget : event.srcElement;
-                  phone = target.value.replace(/\D/g, '');
-                  element = $(target);
-                  element.unmask();
-                  if (phone.length > 10) {
-                      element.mask("(99) 99999-9999");
-                  } else {
-                      element.mask("(99) 9999-99999");
-                  }
-              })
+                $('#telefone').mask("(99) 9999-99999");
+                $('#telefone').on('blur', function (event) {
+                    var target, phone, element;
+                    target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                    phone = target.value.replace(/\D/g, '');
+                    element = $(target);
+                    element.unmask();
+                    if (phone.length > 10) {
+                        element.mask("(99) 99999-9999");
+                    } else {
+                        element.mask("(99) 9999-99999");
+                    }
+                })
 
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
               
@@ -214,7 +214,8 @@
                     removerMarcasDeErroDeTodosCampos();
                     validarCampos();
 
-                    if ($('.campo-erro').length == 0) {                      
+                    if ($('.campo-erro').length == 0) {
+                        $('#solicitar-visita').prop('disabled', true);
                         emailjs.send('gmail', 'agendamento_de_visita_para_or_amento_de_cftv', {
                           nome: $('#nome').val(),
                           telefone: $('#telefone').val(),
@@ -228,13 +229,15 @@
                             className: 'success',
                             elementPosition: 'top left'
                           });
-                          $('#nome,#telefone,#email,#endereco').val('');
+                          $('#nome,#telefone,#email,#endereco,#dia,#hora-inicio').val('');
                           removerMarcasDeErroDeTodosCampos();
                           validarCampos();
+                          $('#solicitar-visita').prop('disabled', false);
                         }, function(err) {
                           $('#solicitar-visita').notify('Não foi possível solicitar a visita. Tente novamente mais tarde.', {
                             className: 'error'
                           });
+                          $('#solicitar-visita').prop('disabled', false);
                         });
                       } else {
                         $('html, body').animate({
