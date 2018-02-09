@@ -165,7 +165,11 @@
                 })
 
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
-                           
+                
+                $(document).bind('keyup', (event) => {
+                  alert(event.keyCode);
+                });
+              
                 $('#dia').pickadate({
                   min: new Date(),
                   container: '#conteiner-dia',
