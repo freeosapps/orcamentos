@@ -166,6 +166,27 @@
 
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
               
+                let campoDataVisita = $('#dia').pickadate();
+                let dataVisitaPicker = campoDataVisita.pickadate('picker');
+              
+                let campoHoraInicioVisita = $('#hora-inicio').pickatime();
+                let horaInicioVisitaPicker = campoDataVisita.pickatime('picker');
+              
+                $(document).bind('keyup', (evento) => {
+                  if (evento.keyCode == 8) {
+                    if (dataVisitaPicker.get('open')) {alert('teste');
+                      dataVisitaPicker.close();
+                      evento.stopPropagation();
+                      return false;
+                    }
+                    if (horaInicioVisitaPicker.get('open')) {alert('teste');
+                      horaInicioVisitaPicker.close();
+                      evento.stopPropagation();
+                      return false;
+                    }
+                  }
+                });
+              
                 $('#dia').pickadate({
                   min: new Date(),
                   container: '#conteiner-dia',
