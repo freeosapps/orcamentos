@@ -43,7 +43,7 @@
                 margin-bottom: 5px;
             }
             input[type=button] {
-                margin-top: 15px;
+                margin-top: 20px;
                 padding: 10px;
                 width: 100%;
                 background-color: #569ff7;
@@ -78,6 +78,7 @@
                 padding: 10px;
                 color: #569ff7;
                 border-color: #569ff7;
+                display: flex;
             }
 
             #hora-termino {
@@ -92,14 +93,12 @@
                 border-color:lightgray;
                 border-radius: 50px;
                 background-color: white;
-                margin: 3px;
             }
             .campo-erro {
                 border-color: #d26565 !important;
             }
             .titulo {
                 padding: 10px;
-                margin: 3px;
             }
             .mensagem-erro-validacao {
               text-align: right;
@@ -162,6 +161,7 @@
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
               
                 $('#dia').pickadate({
+                  min: new Date(),
                   container: '#conteiner-dia',
                   onRender: function() {
                     removerMarcasDeErro('#dia');
@@ -284,7 +284,10 @@
     </head>
     <body>
         <div id="campos">        
-          <h1><img class="camera" src="camera.png"><span class="titulo">Agendamento de visita para orçamento de CFTV</span></h1>
+          <h1>
+            <span class="titulo">Agendamento de visita para orçamento de CFTV</span>
+            <img class="camera" src="camera.png">
+          </h1>
           <label>Nome:<input id="nome" type="text"></label>
           <label>Telefone:<input id="telefone" type="text"></label>
           <label>E-mail:<input id="email" type="text"></label>
