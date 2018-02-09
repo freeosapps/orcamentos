@@ -172,17 +172,17 @@
                 let campoHoraInicioVisita = $('#hora-inicio').pickatime();
                 let horaInicioVisitaPicker = campoDataVisita.pickatime('picker');
               
-                $(window).on("navigate", function (event, data) {
+                $(window).on("navigate", function (event, data) {alert('navigate');
                   var direction = data.state.direction;
-                  if (direction == 'back') {
+                  if (direction == 'back') {alert('back');
                     if (dataVisitaPicker.get('open')) {alert('teste');
                       dataVisitaPicker.close();
-                      evento.stopPropagation();
+                      evento.preventDefault();
                       return false;
                     }
                     if (horaInicioVisitaPicker.get('open')) {alert('teste');
                       horaInicioVisitaPicker.close();
-                      evento.stopPropagation();
+                      evento.preventDefault();
                       return false;
                     }
                   }
