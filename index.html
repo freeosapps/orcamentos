@@ -17,7 +17,8 @@
 
         <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
       
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
       
         <script src="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/picker.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/pickadate@3.5.6/lib/compressed/picker.date.js"></script>
@@ -56,7 +57,7 @@
                 font-size: 12pt;
                 display: block;
             }
-            input[type=text], input[type=tel], input[type=email] {
+            input[type=text] {
                 border: none;
                 border-bottom-width: 1px;
                 border-bottom-style: solid;
@@ -101,12 +102,47 @@
             }
             .mensagem-erro-validacao {
               text-align: right;
-              color: #d10000;
+              color: #cc1d1d;
               font-size: 10pt;
+            }
+            #spinner {
+              width: 100%;
+              max-width: 441px;
+              z-index: 1;
+              margin: 0 auto;
+            }
+            #overlay {
+              display: none;
+              background-color: white;
+              z-index: 1;
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100vw;
+              height: 100vh;
+              text-align: center;
+              color: gray;
             }
         </style>
         <script>
             $(() => {
+                toastr.options = {
+                  "closeButton": false,
+                  "debug": false,
+                  "newestOnTop": false,
+                  "progressBar": false,
+                  "positionClass": "toast-bottom-center",
+                  "preventDuplicates": false,
+                  "onclick": null,
+                  "showDuration": "300",
+                  "hideDuration": "1000",
+                  "timeOut": "5000",
+                  "extendedTimeOut": "1000",
+                  "showEasing": "swing",
+                  "hideEasing": "linear",
+                  "showMethod": "fadeIn",
+                  "hideMethod": "fadeOut"
+                };
               
                 $('#telefone').mask("(99) 9999-99999");
                 $('#telefone').on('blur', function (event) {
@@ -209,6 +245,9 @@
 
                     if ($('.campo-erro').length == 0) {
                         $('#solicitar-visita').prop('disabled', true);
+                        $('#campos').hide();
+                        $('#overlay').show();
+                      
                         emailjs.send('gmail', 'agendamento_de_visita_para_or_amento_de_cftv', {
                           nome: $('#nome').val(),
                           telefone: $('#telefone').val(),
@@ -218,20 +257,19 @@
                           horaInicioVisita: $('#hora-inicio').val()
                         })
                         .then(function(response) {
-                          $('#solicitar-visita').notify('Solicitação de visita realizada com sucesso.', {
-                            className: 'success',
-                            elementPosition: 'top left'
-                          });
+                          toastr['success']('Solicitação de visita realizada com sucesso.');
                           $('#nome,#telefone,#email,#endereco,#dia,#hora-inicio').val('');
-                          $('#hora-termino').val('--:--');
+                          $('#hora-termino').text('--:--');
                           removerMarcasDeErroDeTodosCampos();
                           validarCampos();
                           $('#solicitar-visita').prop('disabled', false);
+                          $('#overlay').hide();
+                          $('#campos').show();
                         }, function(err) {
-                          $('#solicitar-visita').notify('Não foi possível solicitar a visita. Tente novamente mais tarde.', {
-                            className: 'error'
-                          });
+                          toastr['error']('Não foi possível solicitar a visita. Tente novamente mais tarde.');
                           $('#solicitar-visita').prop('disabled', false);
+                          $('#overlay').hide();
+                          $('#campos').show();
                         });
                       } else {
                         $('html, body').animate({
@@ -244,16 +282,22 @@
         </script>
     </head>
     <body>
-        <h1><img class="camera" src="camera.png"><span class="titulo">Agendamento de visita para orçamento de CFTV</span></h1>
-        <label>Nome:<input id="nome" type="text"></label>
-        <label>Telefone:<input id="telefone" type="text"></label>
-        <label>E-mail:<input id="email" type="text"></label>
-        <label>Endereço:<input id="endereco" type="text"></label>
-        <div id="conteiner-dia"></div>
-        <label>Dia da visita: <input id="dia" type="text"></label>
-        <div id="conteiner-hora-inicio"></div>
-        <label>Hora de início da visita: <input id="hora-inicio" type="text"></label>
-        <label>Hora de término da visita: <strong id="hora-termino">--:--</strong></label>
-        <input id="solicitar-visita" type="button" value="Solicitar visita">
+        <div id="campos">        
+          <h1><img class="camera" src="camera.png"><span class="titulo">Agendamento de visita para orçamento de CFTV</span></h1>
+          <label>Nome:<input id="nome" type="text"></label>
+          <label>Telefone:<input id="telefone" type="text"></label>
+          <label>E-mail:<input id="email" type="text"></label>
+          <label>Endereço:<input id="endereco" type="text"></label>
+          <div id="conteiner-dia"></div>
+          <label>Dia da visita: <input id="dia" type="text"></label>
+          <div id="conteiner-hora-inicio"></div>
+          <label>Hora de início da visita: <input id="hora-inicio" type="text"></label>
+          <label>Hora de término da visita: <strong id="hora-termino">--:--</strong></label>
+          <input id="solicitar-visita" type="button" value="Solicitar visita">
+        </div>
+        <div id="overlay">          
+          <img id="spinner" src="spinner.gif">
+          Favor aguardar
+        </div>        
     </body>
 </html>
