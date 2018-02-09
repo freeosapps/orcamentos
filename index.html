@@ -172,15 +172,13 @@
                   onRender: function() {
                     removerMarcasDeErro('#dia');
                     validarCampo('#dia');
+                  },
+                  onOpen: function() {
+                    window.location = '#dia';
+                  },
+                  onClose: function() {
+                    window.history.back();                    
                   }
-                });
-                
-                $('#dia')
-                .bind('focus', () => {
-                  window.location = '#dia';
-                })
-                .bind('blur', () => {
-                  window.history.back();
                 });
               
                 $('#hora-inicio').pickatime({
@@ -197,17 +195,15 @@
                     } else {
                       $('#hora-termino').text('--:--');
                     }                    
+                  },
+                  onOpen: function() {
+                    window.location = '#hora-inicio';
+                  },
+                  onClose: function() {
+                    window.history.back();                    
                   }
                 });
-              
-                $('#hora-inicio')
-                .bind('focus', () => {
-                  window.location = '#hora-inicio';
-                })
-                .bind('blur', () => {
-                  window.history.back();
-                });
-              
+
                 function validarCampo(id, formato, nome) {
                     if (!$(id).val().trim()) {
                         $(id).addClass('campo-erro');
