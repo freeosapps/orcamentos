@@ -172,8 +172,9 @@
                 let campoHoraInicioVisita = $('#hora-inicio').pickatime();
                 let horaInicioVisitaPicker = campoDataVisita.pickatime('picker');
               
-                $(document).bind('keyup', (evento) => {
-                  if (evento.keyCode == 8) {
+                $(window).on("navigate", function (event, data) {
+                  var direction = data.state.direction;
+                  if (direction == 'back') {
                     if (dataVisitaPicker.get('open')) {alert('teste');
                       dataVisitaPicker.close();
                       evento.stopPropagation();
