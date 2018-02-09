@@ -165,28 +165,6 @@
                 })
 
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
-
-                let campoDataVisita = $('#dia').pickadate();
-                let dataVisitaPicker = campoDataVisita.pickadate('picker');
-              
-                let campoHoraInicioVisita = $('#hora-inicio').pickatime();
-                let horaInicioVisitaPicker = campoDataVisita.pickatime('picker');
-              
-                $(window).on("navigate", function (event, data) {alert('navigate');
-                  var direction = data.state.direction;
-                  if (direction == 'back') {alert('back')
-                    if (dataVisitaPicker.get('open')) {alert('teste');
-                      dataVisitaPicker.close();
-                      evento.preventDefault();
-                      return false;
-                    }
-                    if (horaInicioVisitaPicker.get('open')) {alert('teste');
-                      horaInicioVisitaPicker.close();
-                      evento.preventDefault();
-                      return false;
-                    }
-                  }
-                });
               
                 $('#dia').pickadate({
                   min: new Date(),
