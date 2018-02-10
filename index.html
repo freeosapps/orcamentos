@@ -184,9 +184,6 @@
                   onOpen: function() {
                     history.pushState({campo: 'dia'}, 'dia');
                   },
-                  onClose: function() {
-                    history.back();
-                  },
                   close: ''
                 });
               
@@ -207,9 +204,6 @@
                   },
                   onOpen: function() {
                     history.pushState({campo: 'hora-inicio'}, 'hora-inicio');
-                  },
-                  onClose: function() {
-                    history.back();
                   }
                 });
               
@@ -225,8 +219,14 @@
                   } else if (campoHoraInicioPicker.get('open')) {
                     campoHoraInicioPicker.close();
                   }
-                  event.preventDefault();
-                  return false;
+                });
+              
+                $(document).bind('click', function(event) {
+                  if (campoDiaPicker.get('open')) {
+                    history.back();
+                  } else if (campoHoraInicioPicker.get('open')) {
+                    history.back();
+                  }                
                 });
 
                 function validarCampo(id, formato, nome) {
