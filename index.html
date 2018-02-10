@@ -181,17 +181,15 @@
                 $('#dia').pickadate({
                   min: new Date(),
                   container: '#conteiner-dia',
-                  onRender: function() {
-                    removerMarcasDeErro('#dia');
-                    validarCampo('#dia');
-                  },
                   onOpen: function() {
                     history.pushState({campo: 'dia'}, 'dia');
                   },
-                  onClose: function() {
+                  onClose: function() {                    
                     if (history.state) {
                       history.back();
                     }
+                    removerMarcasDeErro('#dia');
+                    validarCampo('#dia', true); 
                   },
                   close: ''
                 });
@@ -199,10 +197,6 @@
                 $('#hora-inicio').pickatime({
                   format: 'HH:i',
                   container: '#conteiner-hora-inicio',
-                  onRender: function() {
-                    removerMarcasDeErro('#hora-inicio');
-                    validarCampo('#hora-inicio');
-                  },                  
                   onSet: function(valor) {
                     let horaInicioVisita = $('#hora-inicio').val();
                     if (horaInicioVisita) {
@@ -218,6 +212,8 @@
                     if (history.state) {
                       history.back();
                     }
+                    removerMarcasDeErro('#hora-inicio');
+                    validarCampo('#hora-inicio', true);
                   }
                 });
               
