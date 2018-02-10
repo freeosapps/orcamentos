@@ -219,12 +219,14 @@
                 let campoHoraInicio = $('#hora-inicio').pickatime();
                 let campoHoraInicioPicker = campoHoraInicio.pickatime('picker');
                             
-                $(window).bind('popstate', function() {
+                $(window).bind('popstate', function(event) {
                   if (campoDiaPicker.get('open')) {
                     campoDiaPicker.close();
                   } else if (campoHoraInicioPicker.get('open')) {
                     campoHoraInicioPicker.close();
                   }
+                  event.preventDefault();
+                  return false;
                 });
 
                 function validarCampo(id, formato, nome) {
