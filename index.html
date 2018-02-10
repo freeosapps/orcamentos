@@ -174,7 +174,7 @@
                     validarCampo('#dia');
                   },
                   onOpen: function() {
-                    history.pushState({campo: 'dia'}, 'dia');
+                    window.location.hash = 'dia';
                   }
                 });
               
@@ -194,7 +194,7 @@
                     }                    
                   },
                   onOpen: function() {
-                    history.pushState({campo: 'hora-inicio'}, 'hora-inicio');
+                    window.location.hash = 'hora-inicio';
                   }
                 });
               
@@ -204,7 +204,7 @@
                 let campoHoraInicio = $('#hora-inicio').pickatime();
                 let campoHoraInicioPicker = campoHoraInicio.pickatime('picker');
                             
-                $(window).bind('popstate', function(a) {
+                $(window).bind('popstate', function(event) {
                   if (campoDiaPicker.get('open')) {
                     campoDiaPicker.close();
                   } else if (campoHoraInicioPicker.get('open')) {
