@@ -164,10 +164,18 @@
                     }
                 })
 
-                $(document).keyup(function(event) {
-                  alert(`event.keyCode = ${event.keyCode}`);
-                  event.preventDefault();
-                  return false;
+                let campoDia = $('#dia').pickadate();
+                let campoDiaPicker = campoDia.pickadate('picker');
+              
+                let campoHoraInicio = $('#hora-inicio').pickatime();
+                let campoHoraInicioPicker = campoHoraInicio.pickatime('picker');
+              
+                $(window).bind('popstate', function(a) {
+                  if (campoDiaPicker.get('open')) {
+                    campoDiaPicker.close();
+                  } else if (campoHoraInicioPicker.get('open')) {
+                    campoHoraInicioPicker.close();
+                  }
                 });
               
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
@@ -178,6 +186,12 @@
                   onRender: function() {
                     removerMarcasDeErro('#dia');
                     validarCampo('#dia');
+                  },
+                  onOpen: function() {
+                    location.hash = 'dia';
+                  },
+                  onClose: function() {
+                    history.back();
                   }
                 });
               
@@ -195,6 +209,12 @@
                     } else {
                       $('#hora-termino').text('--:--');
                     }                    
+                  },
+                  onOpen: function() {
+                    window.location.hash = 'hora-inicio';
+                  },
+                  onClose: function() {
+                    history.back();
                   }
                 });
 
