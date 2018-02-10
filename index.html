@@ -136,7 +136,8 @@
         </style>
         <script>
             $(() => {
-                var placesAutocomplete = places({
+                let voltarHistorico = true;
+                let placesAutocomplete = places({
                   container: $('#endereco')[0]
                 });
               
@@ -183,6 +184,12 @@
                   },
                   onOpen: function() {
                     history.pushState({campo: 'dia'}, 'dia');
+                    voltarHistorico = true;
+                  },
+                  onClose: function() {
+                    if (voltarHistorico) {
+                      history.back();
+                    }
                   },
                   close: ''
                 });
@@ -204,6 +211,12 @@
                   },
                   onOpen: function() {
                     history.pushState({campo: 'hora-inicio'}, 'hora-inicio');
+                    voltarHistorico = true;
+                  },
+                  onClose: function() {
+                    if (voltarHistorico) {
+                      history.back();
+                    }
                   }
                 });
               
@@ -216,19 +229,13 @@
                 $(window).bind('popstate', function(event) {
                   if (campoDiaPicker.get('open')) {
                     campoDiaPicker.close();
+                    voltarHistorico = false;
                   } else if (campoHoraInicioPicker.get('open')) {
                     campoHoraInicioPicker.close();
+                    voltarHistorico = false;
                   }
                 });
-              
-                $(window).bind('click', function(event) {
-                  if (campoDiaPicker.get('open')) {
-                    history.back();
-                  } else if (campoHoraInicioPicker.get('open')) {
-                    history.back();
-                  }                
-                });
-
+                
                 function validarCampo(id, formato, nome) {
                     if (!$(id).val().trim()) {
                         $(id).addClass('campo-erro');
