@@ -164,6 +164,10 @@
                     }
                 })
 
+                $(document).keyup(function(event) {
+                  alert(`event.keyCode = ${event.keyCode}`);
+                });
+              
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
               
                 $('#dia').pickadate({
