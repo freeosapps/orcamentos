@@ -143,7 +143,13 @@
                 let placesAutocomplete = places({
                   container: $('#endereco')[0],
                   language: 'pt_BR',
-                  type: 'address'
+                  type: 'address',
+                  countries: ['br'],
+                  templates: {
+                    value: function(suggestion) {
+                      return `${suggestion.name}, ${suggestion.city}`;
+                    }
+                  }
                 });
               
                 toastr.options = {
