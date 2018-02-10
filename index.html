@@ -184,6 +184,9 @@
                   onOpen: function() {
                     history.pushState({campo: 'dia'}, 'dia');
                   },
+                  onClose: function() {
+                    history.back();
+                  },
                   close: ''
                 });
               
@@ -204,6 +207,9 @@
                   },
                   onOpen: function() {
                     history.pushState({campo: 'hora-inicio'}, 'hora-inicio');
+                  },
+                  onClose: function() {
+                    history.back();
                   }
                 });
               
