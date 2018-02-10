@@ -163,20 +163,6 @@
                         element.mask("(99) 9999-99999");
                     }
                 })
-
-                let campoDia = $('#dia').pickadate();
-                let campoDiaPicker = campoDia.pickadate('picker');
-              
-                let campoHoraInicio = $('#hora-inicio').pickatime();
-                let campoHoraInicioPicker = campoHoraInicio.pickatime('picker');
-              
-                $(window).bind('popstate', function(a) {
-                  if (campoDiaPicker.get('open')) {
-                    campoDiaPicker.close();
-                  } else if (campoHoraInicioPicker.get('open')) {
-                    campoHoraInicioPicker.close();
-                  }
-                });
               
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
               
@@ -188,10 +174,7 @@
                     validarCampo('#dia');
                   },
                   onOpen: function() {
-                    location.hash = 'dia';
-                  },
-                  onClose: function() {
-                    history.back();
+                    history.pushState({campo: 'dia'}, 'dia');
                   }
                 });
               
@@ -211,10 +194,21 @@
                     }                    
                   },
                   onOpen: function() {
-                    window.location.hash = 'hora-inicio';
-                  },
-                  onClose: function() {
-                    history.back();
+                    history.pushState({campo: 'hora-inicio'}, 'hora-inicio');
+                  }
+                });
+              
+                let campoDia = $('#dia').pickadate();
+                let campoDiaPicker = campoDia.pickadate('picker');
+              
+                let campoHoraInicio = $('#hora-inicio').pickatime();
+                let campoHoraInicioPicker = campoHoraInicio.pickatime('picker');
+                            
+                $(window).bind('popstate', function(a) {
+                  if (campoDiaPicker.get('open')) {
+                    campoDiaPicker.close();
+                  } else if (campoHoraInicioPicker.get('open')) {
+                    campoHoraInicioPicker.close();
                   }
                 });
 
