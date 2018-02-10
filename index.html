@@ -136,7 +136,6 @@
         </style>
         <script>
             $(() => {
-                let voltarHistorico = true;
                 let placesAutocomplete = places({
                   container: $('#endereco')[0]
                 });
@@ -184,10 +183,9 @@
                   },
                   onOpen: function() {
                     history.pushState({campo: 'dia'}, 'dia');
-                    voltarHistorico = true;
                   },
                   onClose: function() {
-                    if (voltarHistorico) {
+                    if (history.state) {
                       history.back();
                     }
                   },
@@ -211,10 +209,9 @@
                   },
                   onOpen: function() {
                     history.pushState({campo: 'hora-inicio'}, 'hora-inicio');
-                    voltarHistorico = true;
                   },
                   onClose: function() {
-                    if (voltarHistorico) {
+                    if (history.state) {
                       history.back();
                     }
                   }
@@ -225,14 +222,12 @@
               
                 let campoHoraInicio = $('#hora-inicio').pickatime();
                 let campoHoraInicioPicker = campoHoraInicio.pickatime('picker');
-                            
+                              
                 $(window).bind('popstate', function(event) {
                   if (campoDiaPicker.get('open')) {
                     campoDiaPicker.close();
-                    voltarHistorico = false;
                   } else if (campoHoraInicioPicker.get('open')) {
                     campoHoraInicioPicker.close();
-                    voltarHistorico = false;
                   }
                 });
                 
