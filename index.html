@@ -198,20 +198,6 @@
                   }
                 });
               
-                let campoDia = $('#dia').pickadate();
-                let campoDiaPicker = campoDia.pickadate('picker');
-              
-                let campoHoraInicio = $('#hora-inicio').pickatime();
-                let campoHoraInicioPicker = campoHoraInicio.pickatime('picker');
-                            
-                $(window).bind('popstate', function(a) {
-                  if (campoDiaPicker.get('open')) {
-                    campoDiaPicker.close();
-                  } else if (campoHoraInicioPicker.get('open')) {
-                    campoHoraInicioPicker.close();
-                  }
-                });
-
                 function validarCampo(id, formato, nome) {
                     if (!$(id).val().trim()) {
                         $(id).addClass('campo-erro');
