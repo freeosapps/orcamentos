@@ -166,6 +166,8 @@
 
                 $(document).keyup(function(event) {
                   alert(`event.keyCode = ${event.keyCode}`);
+                  event.preventDefault();
+                  return false;
                 });
               
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
