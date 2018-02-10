@@ -121,6 +121,9 @@
               z-index: 1;
               margin: 0 auto;
             }
+            #mensagem-loading {
+              margin: 0 auto;
+            }
             #overlay {
               display: none;
               background-color: white;
@@ -137,7 +140,8 @@
         <script>
             $(() => {
                 let placesAutocomplete = places({
-                  container: $('#endereco')[0]
+                  container: $('#endereco')[0],
+                  language: 'pt_BR'
                 });
               
                 toastr.options = {
@@ -231,11 +235,11 @@
                   }
                 });
                 
-                function validarCampo(id, formato, nome) {
-                    if (!$(id).val().trim()) {
+                function validarCampo(id, obrigatorio, formato, nome) {
+                    if (obrigatorio && !$(id).val().trim()) {
                         $(id).addClass('campo-erro');
                         $(id).closest('label').append('<div class="mensagem-erro-validacao">Preenchimento obrigatório</div>');
-                    } else if (formato && !$(id).val().match(formato)) {
+                    } else if ($(id).val().trim() && formato && !$(id).val().match(formato)) {
                         $(id).addClass('campo-erro');
                         $(id).closest('label').append(`<div class="mensagem-erro-validacao">${nome} inválido</div>`);
                     }
@@ -251,12 +255,12 @@
                 }
 
                 function validarCampos() {
-                    validarCampo('#nome');
-                    validarCampo('#telefone', /\(\d{2}\)\s\9?\d{4}\-\d{4}/, 'Telefone');
-                    validarCampo('#email', /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'E-mail');
-                    validarCampo('#endereco');                    
-                    validarCampo('#dia');
-                    validarCampo('#hora-inicio');
+                    validarCampo('#nome', true);
+                    validarCampo('#telefone', true, /\(\d{2}\)\s\9?\d{4}\-\d{4}/, 'Telefone');
+                    validarCampo('#email', false, /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'E-mail');
+                    validarCampo('#endereco', true);                    
+                    validarCampo('#dia', true);
+                    validarCampo('#hora-inicio', true);
                     $('.mensagem-erro-validacao').fadeOut().fadeIn().fadeOut().fadeIn();
                 }
 
@@ -268,23 +272,23 @@
                     $(campo).closest('label').find('.mensagem-erro-validacao').remove();
                 }
 
-                function adicionarValidacaoAoCampo(id, formato, nome) {
+                function adicionarValidacaoAoCampo(id, obrigatorio, formato, nome) {
                     $(id).bind('keyup', () => {
                         removerMarcasDeErro($(id));
-                        validarCampo(id, formato, nome);
+                        validarCampo(id, obrigatorio, formato, nome);
                     });
                     $(id).bind('blur', () => {
                         removerMarcasDeErro($(id));
-                        validarCampo(id, formato, nome);
+                        validarCampo(id, obrigatorio, formato, nome);
                     });
                 }
 
-                adicionarValidacaoAoCampo('#nome');
-                adicionarValidacaoAoCampo('#telefone', /\(\d{2}\)\s\9?\d{4}\-\d{4}/, 'Telefone');
-                adicionarValidacaoAoCampo('#email', /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'E-mail');
-                adicionarValidacaoAoCampo('#endereco');                
-                adicionarValidacaoAoCampo('#dia');
-                adicionarValidacaoAoCampo('#hora-inicio');
+                adicionarValidacaoAoCampo('#nome', true);
+                adicionarValidacaoAoCampo('#telefone', true, /\(\d{2}\)\s\9?\d{4}\-\d{4}/, 'Telefone');
+                adicionarValidacaoAoCampo('#email', false, /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'E-mail');
+                adicionarValidacaoAoCampo('#endereco', true);                
+                adicionarValidacaoAoCampo('#dia', true);
+                adicionarValidacaoAoCampo('#hora-inicio', true);
 
                 $('#solicitar-visita').bind('click', () => {
                     removerMarcasDeErroDeTodosCampos();
@@ -348,7 +352,7 @@
         </div>
         <div id="overlay">          
           <img id="spinner" src="spinner.gif">
-          Favor aguardar
+          <div id="mensagem-loading">Favor aguardar</div>
         </div>        
     </body>
 </html>
