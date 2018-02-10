@@ -221,13 +221,6 @@
                   }
                 });
               
-                $(document).bind('click', function(event) {
-                  if (campoDiaPicker.get('open')) {
-                    history.back();
-                  } else if (campoHoraInicioPicker.get('open')) {
-                    history.back();
-                  }                
-                });
 
                 function validarCampo(id, formato, nome) {
                     if (!$(id).val().trim()) {
