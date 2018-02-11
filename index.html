@@ -143,6 +143,7 @@
             }
         </style>
         <script>
+            horariosIndisponiveis = [];
             $(() => {
                 let config = {
                   apiKey: "AIzaSyC7Iac3GnFSO00nALMMe7JbIt_jYSmO-R8",
@@ -154,12 +155,7 @@
                 };
                 firebase.initializeApp(config);
                 let database = firebase.database();
-              
-                let starCountRef = firebase.database().ref('orcamentos-4598f');
-                starCountRef.on('value', function(snapshot) {
-                  console.log(snapshot.val());
-                });
-              
+                            
                 let placesAutocomplete = places({
                   container: $('#endereco')[0],
                   language: 'pt_BR',
@@ -205,27 +201,9 @@
                 })
               
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
-              
-                $('#dia').pickadate({
-                  min: new Date(),
-                  container: '#conteiner-dia',
-                  onOpen: function() {
-                    history.pushState({campo: 'dia'}, 'dia');
-                  },
-                  onClose: function() {                    
-                    if (history.state) {
-                      history.back();
-                    }
-                    removerMarcasDeErro('#dia');
-                    validarCampo({
-                      seletor: '#dia',
-                      obrigatorio: true
-                    }); 
-                  },
-                  close: ''
-                });
-              
+                                          
                 $('#hora-inicio').pickatime({
+                  disable: horariosIndisponiveis,
                   format: 'HH:i',
                   container: '#conteiner-hora-inicio',
                   onSet: function(valor) {
@@ -251,12 +229,49 @@
                   }
                 });
               
+                let campoHoraInicio = $('#hora-inicio').pickatime();
+                let campoHoraInicioPicker = campoHoraInicio.pickatime('picker');
+              
+                $('#dia').pickadate({
+                  formatSubmit: 'yyyy-mm-dd',
+                  hiddenSuffix: 'dia-formatado',
+                  min: new Date(),
+                  container: '#conteiner-dia',
+                  onSet: function(valor) {
+                    let diaVisita = $('[name=dia-formatado]').val();
+                    if (diaVisita) {
+                      firebase.database().ref(`visitas/${diaVisita}`).once('value', function(snapshot) {
+                        let visitasSolicitadas = snapshot.val();
+                        if (visitasSolicitadas) {
+                          for (let i = 0; i < visitasSolicitadas.length; i++) {
+                            let visitaSolicitada = visitasSolicitadas[i];
+                            let horasMinutosInicio = visitaSolicitada.horaInicioVisita.split(':');
+                            let horasMinutosTermino = visitaSolicitada.horaTerminoVisita.split(':');
+                            campoHoraInicioPicker.set('disable', [{from: horasMinutosInicio, to: horasMinutosTermino}]);
+                          }
+                        }
+                      });
+                    }
+                  },
+                  onOpen: function() {
+                    history.pushState({campo: 'dia'}, 'dia');
+                  },
+                  onClose: function() {                    
+                    if (history.state) {
+                      history.back();
+                    }
+                    removerMarcasDeErro('#dia');
+                    validarCampo({
+                      seletor: '#dia',
+                      obrigatorio: true
+                    }); 
+                  },
+                  close: ''
+                });
+              
                 let campoDia = $('#dia').pickadate();
                 let campoDiaPicker = campoDia.pickadate('picker');
               
-                let campoHoraInicio = $('#hora-inicio').pickatime();
-                let campoHoraInicioPicker = campoHoraInicio.pickatime('picker');
-                              
                 $(window).bind('popstate', function(event) {
                   if (campoDiaPicker.get('open')) {
                     campoDiaPicker.close();
@@ -377,6 +392,40 @@
                         $('#campos').hide();
                         $('#overlay').show();
                       
+                        firebase.database().ref(`visitas/${$('[name=dia-formatado]').val()}`).once('value', function(snapshot) {
+                          let visitasDia = snapshot.val();
+                          if (!visitasDia) {
+                            visitasDia = [];
+                          }
+                          visitasDia.push({
+                            nome: $('#nome').val(),
+                            telefone: $('#telefone').val(),
+                            endereco: $('#endereco').val(),
+                            email: $('#email').val(),
+                            dataVisita: $('#dia').val(),
+                            horaInicioVisita: $('#hora-inicio').val(),
+                            horaTerminoVisita: $('#hora-termino').text()
+                          });
+                          firebase.database().ref(`visitas/${$('[name=dia-formatado]').val()}`).set(visitasDia)
+                          .then(() => {
+                            toastr['success']('Solicitação de visita realizada com sucesso.');
+                            $('#nome,#telefone,#email,#endereco,#dia,#hora-inicio').val('');
+                            $('#hora-termino').text('--:--');
+                            removerMarcasDeErroDeTodosCampos();
+                            validarCampos();
+                            $('#solicitar-visita').prop('disabled', false);
+                            $('#overlay').hide();
+                            $('#campos').show();
+                          })
+                          .catch(() => {
+                            toastr['error']('Não foi possível solicitar a visita. Tente novamente mais tarde.');
+                            $('#solicitar-visita').prop('disabled', false);
+                            $('#overlay').hide();
+                            $('#campos').show();
+                          });
+                        });
+
+                        /*
                         emailjs.send('gmail', 'agendamento_de_visita_para_or_amento_de_cftv', {
                           nome: $('#nome').val(),
                           telefone: $('#telefone').val(),
@@ -400,6 +449,7 @@
                           $('#overlay').hide();
                           $('#campos').show();
                         });
+                        */
                       } else {
                         $('html, body').animate({
                             scrollTop: $($('.campo-erro')[0]).closest('label').offset().top
