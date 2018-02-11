@@ -143,7 +143,7 @@
             }
         </style>
         <script>
-            horariosIndisponiveis = [];
+            const ESTIMATIVA_VISITA_EM_HORAS = 2;
             $(() => {
                 let config = {
                   apiKey: "AIzaSyC7Iac3GnFSO00nALMMe7JbIt_jYSmO-R8",
@@ -209,7 +209,7 @@
                   onSet: function(valor) {
                     let horaInicioVisita = $('#hora-inicio').val();
                     if (horaInicioVisita) {
-                      $('#hora-termino').text(moment(horaInicioVisita, 'HH:mm').add(2, 'hours').format('HH:mm'));
+                      $('#hora-termino').text(moment(horaInicioVisita, 'HH:mm').add(ESTIMATIVA_VISITA_EM_HORAS, 'hours').format('HH:mm'));
                     } else {
                       $('#hora-termino').text('--:--');
                     }                    
@@ -245,7 +245,7 @@
                         if (visitasSolicitadas) {
                           for (let i = 0; i < visitasSolicitadas.length; i++) {
                             let visitaSolicitada = visitasSolicitadas[i];
-                            let horasMinutosInicio = visitaSolicitada.horaInicioVisita.split(':');
+                            let horasMinutosInicio = moment(visitaSolicitada.horaInicioVisita, 'HH:mm').subtract(ESTIMATIVA_VISITA_EM_HORAS, 'hours').format('HH:mm').split(':');
                             let horasMinutosTermino = visitaSolicitada.horaTerminoVisita.split(':');
                             campoHoraInicioPicker.set('disable', [{from: horasMinutosInicio, to: horasMinutosTermino}]);
                           }
