@@ -400,20 +400,21 @@
                         $('#campos').hide();
                         $('#overlay').show();
                       
+                        let dadosVisita = {
+                          nome: $('#nome').val(),
+                          telefone: $('#telefone').val(),
+                          endereco: $('#endereco').val(),
+                          email: $('#email').val(),
+                          dataVisita: $('#dia').val(),
+                          horaInicioVisita: $('#hora-inicio').val(),
+                          horaTerminoVisita: $('#hora-termino').text()
+                        };
+                      
                         firebase.database().ref(`visitas/${$('[name=dia-formatado]').val()}`).once('value', function(snapshot) {
                           let visitasDia = snapshot.val();
                           if (!visitasDia) {
                             visitasDia = [];
                           }
-                          let dadosVisita = {
-                            nome: $('#nome').val(),
-                            telefone: $('#telefone').val(),
-                            endereco: $('#endereco').val(),
-                            email: $('#email').val(),
-                            dataVisita: $('#dia').val(),
-                            horaInicioVisita: $('#hora-inicio').val(),
-                            horaTerminoVisita: $('#hora-termino').text()
-                          };
                           visitasDia.push(dadosVisita);
                           firebase.database().ref(`visitas/${$('[name=dia-formatado]').val()}`).set(visitasDia)
                           .then(() => {
