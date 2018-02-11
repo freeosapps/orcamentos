@@ -397,7 +397,7 @@
                           if (!visitasDia) {
                             visitasDia = [];
                           }
-                          visitasDia.push({
+                          let dadosVisita = {
                             nome: $('#nome').val(),
                             telefone: $('#telefone').val(),
                             endereco: $('#endereco').val(),
@@ -405,7 +405,8 @@
                             dataVisita: $('#dia').val(),
                             horaInicioVisita: $('#hora-inicio').val(),
                             horaTerminoVisita: $('#hora-termino').text()
-                          });
+                          };
+                          visitasDia.push(dadosVisita);
                           firebase.database().ref(`visitas/${$('[name=dia-formatado]').val()}`).set(visitasDia)
                           .then(() => {
                             toastr['success']('Solicitação de visita realizada com sucesso.');
@@ -425,15 +426,7 @@
                           });
                         });
 
-                        /*
-                        emailjs.send('gmail', 'agendamento_de_visita_para_or_amento_de_cftv', {
-                          nome: $('#nome').val(),
-                          telefone: $('#telefone').val(),
-                          endereco: $('#endereco').val(),
-                          email: $('#email').val(),
-                          dataVisita: $('#dia').val(),
-                          horaInicioVisita: $('#hora-inicio').val()
-                        })
+                        emailjs.send('gmail', 'agendamento_de_visita_para_or_amento_de_cftv', dadosVisita)
                         .then(function(response) {
                           toastr['success']('Solicitação de visita realizada com sucesso.');
                           $('#nome,#telefone,#email,#endereco,#dia,#hora-inicio').val('');
@@ -455,8 +448,7 @@
                             scrollTop: $($('.campo-erro')[0]).closest('label').offset().top
                         }, 500);
                         $($('.campo-erro')[0]).focus();
-                    }
-                    
+                      }                    
                 });                
             });            
         </script>
