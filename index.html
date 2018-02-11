@@ -203,7 +203,6 @@
                 emailjs.init("user_7PUOtTzewZVqpdO3KNlTp");
                                           
                 $('#hora-inicio').pickatime({
-                  disable: horariosIndisponiveis,
                   format: 'HH:i',
                   container: '#conteiner-hora-inicio',
                   onSet: function(valor) {
@@ -441,8 +440,7 @@
                           $('#solicitar-visita').prop('disabled', false);
                           $('#overlay').hide();
                           $('#campos').show();
-                        });
-                        */
+                        });                        
                       } else {
                         $('html, body').animate({
                             scrollTop: $($('.campo-erro')[0]).closest('label').offset().top
