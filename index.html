@@ -237,6 +237,8 @@
                   min: new Date(),
                   container: '#conteiner-dia',
                   onSet: function(valor) {
+                    campoHoraInicioPicker.set('enable', true);
+                    campoHoraInicioPicker.set('disable', false);
                     let diaVisita = $('[name=dia-formatado]').val();
                     if (diaVisita) {
                       firebase.database().ref(`visitas/${diaVisita}`).once('value', function(snapshot) {
