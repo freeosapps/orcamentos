@@ -32,6 +32,9 @@
             
         <script src="https://cdn.jsdelivr.net/npm/places.js@1.4.18"></script>
       
+        <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase-database.js"></script>
+      
         <style>
             * {
                 font-family: Arial, Helvetica, sans-serif;
@@ -137,9 +140,31 @@
               text-align: center;
               color: gray;
             }
+            .ap-icon-clear svg {
+              border: 1px solid lightgray;
+              padding: 5px;
+              border-radius: 50px;
+              background-color: white;
+            }
         </style>
         <script>
             $(() => {
+                let config = {
+                  apiKey: "AIzaSyC7Iac3GnFSO00nALMMe7JbIt_jYSmO-R8",
+                  authDomain: "orcamentos-4598f.firebaseapp.com",
+                  databaseURL: "https://orcamentos-4598f.firebaseio.com",
+                  projectId: "orcamentos-4598f",
+                  storageBucket: "orcamentos-4598f.appspot.com",
+                  messagingSenderId: "809687421109"
+                };
+                firebase.initializeApp(config);
+                let database = firebase.database();
+              
+                let starCountRef = firebase.database().ref('orcamentos-4598f');
+                starCountRef.on('value', function(snapshot) {
+                  console.log(snapshot.val());
+                });
+              
                 let placesAutocomplete = places({
                   container: $('#endereco')[0],
                   language: 'pt_BR',
