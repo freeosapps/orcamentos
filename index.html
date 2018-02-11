@@ -240,6 +240,13 @@
                     campoHoraInicioPicker.set('enable', true);
                     campoHoraInicioPicker.set('disable', false);
                     let diaVisita = $('[name=dia-formatado]').val();
+                    
+                    if (diaVisita == moment().format('YYYY-MM-DD')) {
+                      campoHoraInicioPicker.set('min', true);
+                    } else {
+                      campoHoraInicioPicker.set('min', false);
+                    }
+                    
                     if (diaVisita) {
                       firebase.database().ref(`visitas/${diaVisita}`).once('value', function(snapshot) {
                         let visitasSolicitadas = snapshot.val();
