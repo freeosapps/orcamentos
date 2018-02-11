@@ -419,27 +419,21 @@
                           firebase.database().ref(`visitas/${$('[name=dia-formatado]').val()}`).set(visitasDia)
                           .then(() => {
                             emailjs.send('gmail', 'agendamento_de_visita_para_or_amento_de_cftv', dadosVisita)
-                              .then(function(response) {
-                                toastr['success']('Solicitação de visita realizada com sucesso.');
-                                $('#nome,#telefone,#email,#endereco,#dia,#hora-inicio').val('');
-                                $('#hora-termino').text('--:--');
-                                removerMarcasDeErroDeTodosCampos();
-                                validarCampos();
-                                $('#solicitar-visita').prop('disabled', false);
-                                $('#overlay').hide();
-                                $('#campos').show();
-                              }, function(err) {
-                                toastr['error']('Não foi possível solicitar a visita. Tente novamente mais tarde.');
-                                $('#solicitar-visita').prop('disabled', false);
-                                $('#overlay').hide();
-                                $('#campos').show();
-                              });                        
-                            } else {
-                              $('html, body').animate({
-                                  scrollTop: $($('.campo-erro')[0]).closest('label').offset().top
-                              }, 500);
-                              $($('.campo-erro')[0]).focus();
-                            }     
+                            .then(function(response) {
+                              toastr['success']('Solicitação de visita realizada com sucesso.');
+                              $('#nome,#telefone,#email,#endereco,#dia,#hora-inicio').val('');
+                              $('#hora-termino').text('--:--');
+                              removerMarcasDeErroDeTodosCampos();
+                              validarCampos();
+                              $('#solicitar-visita').prop('disabled', false);
+                              $('#overlay').hide();
+                              $('#campos').show();
+                            }, function(err) {
+                              toastr['error']('Não foi possível solicitar a visita. Tente novamente mais tarde.');
+                              $('#solicitar-visita').prop('disabled', false);
+                              $('#overlay').hide();
+                              $('#campos').show();
+                            });  
                           })
                           .catch(() => {
                             toastr['error']('Não foi possível solicitar a visita. Tente novamente mais tarde.');
@@ -447,7 +441,14 @@
                             $('#overlay').hide();
                             $('#campos').show();
                           });
-                        });               
+                        });
+                      
+                      } else {
+                        $('html, body').animate({
+                            scrollTop: $($('.campo-erro')[0]).closest('label').offset().top
+                        }, 500);
+                        $($('.campo-erro')[0]).focus();
+                      }                    
                 });                
             });            
         </script>
