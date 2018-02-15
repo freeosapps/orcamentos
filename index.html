@@ -345,6 +345,7 @@
 
                 removerMarcasDeErroDeTodosCampos();
                 validarCampos();
+                $($('.campo-erro')[0]).focus();
 
                 function removerMarcasDeErro(campo) {                    
                     $(campo).removeClass('campo-erro');
